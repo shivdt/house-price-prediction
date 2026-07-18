@@ -126,3 +126,63 @@ Future log entries will document important technical decisions, observations fro
 
 ### Notes
 Learned the purpose of virtual environments, reproducibility, Git commit practices, and dependency management.
+
+
+# Phase 3 – Data Understanding
+
+## Objective
+
+Develop a thorough understanding of the dataset before performing exploratory analysis, preprocessing, or model building.
+
+## Completed Tasks
+
+* Reviewed the Kaggle competition objective and evaluation metric.
+* Loaded `train.csv` and `test.csv` into pandas.
+* Verified dataset dimensions:
+
+  * Training set: **1460 rows × 81 columns**
+  * Test set: **1459 rows × 80 columns**
+* Confirmed that:
+
+  * Each row represents one residential house.
+  * `SalePrice` is the prediction target.
+  * `Id` is an identifier.
+  * `SalePrice` is absent from the test dataset.
+* Inspected feature names and data types.
+* Studied `data_description.txt` to understand feature meanings.
+* Investigated missing values conceptually rather than immediately applying preprocessing.
+* Identified that many missing values represent "Not Applicable" rather than missing information (e.g., no pool, no garage, no basement).
+* Began semantic feature classification:
+
+  * Identifier
+  * Target
+  * Numerical
+  * Nominal
+  * Ordinal
+  * Temporal
+
+## Key Learnings
+
+* Data understanding must precede data cleaning and modeling.
+* Missing values should always be interpreted before deciding how to handle them.
+* The semantic meaning of a feature is often more important than its storage data type.
+* Numeric-looking variables (such as `MSSubClass`) may actually represent categorical information.
+* Ordered categories (ordinal features) should be distinguished from nominal categories because they often require different preprocessing strategies.
+
+## Professional Practices Learned
+
+* Read the dataset documentation before writing preprocessing code.
+* Build a mental model of the dataset before running extensive analysis.
+* Separate observations, hypotheses, evidence, and conclusions.
+* Perform disciplined exploration by asking a clear question before executing each analysis step.
+
+## Current Project Status
+
+* ✅ Phase 1 – Business Understanding
+* ✅ Phase 2 – Project Setup
+* ✅ Phase 3 – Data Understanding
+* ⏳ Phase 4 – Exploratory Data Analysis (Next)
+
+## Reflection
+
+This phase reinforced that successful machine learning projects begin with understanding the data rather than immediately building models. Careful interpretation of features, documentation, and missing values provides the foundation for meaningful exploratory analysis and informed modeling decisions in the next phase.
