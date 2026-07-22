@@ -186,3 +186,78 @@ Develop a thorough understanding of the dataset before performing exploratory an
 ## Reflection
 
 This phase reinforced that successful machine learning projects begin with understanding the data rather than immediately building models. Careful interpretation of features, documentation, and missing values provides the foundation for meaningful exploratory analysis and informed modeling decisions in the next phase.
+
+
+
+# Phase 4 – Exploratory Data Analysis (EDA)
+
+## Objective
+
+Explore the dataset systematically to understand the distribution of the target variable, identify important feature patterns, investigate relationships with the target, and generate hypotheses for preprocessing and model development.
+
+## Completed Tasks
+
+* Performed descriptive statistical analysis of the target variable (`SalePrice`).
+* Examined the distribution of `SalePrice` using histograms and box plots.
+* Identified positive skewness in the target distribution.
+* Calculated summary statistics including median and interquartile range (IQR).
+* Generated a dataset-wide feature summary:
+  * Numerical and categorical feature identification.
+  * Missing value analysis.
+  * Feature cardinality analysis.
+  * Initial correlation analysis with the target variable.
+* Performed detailed univariate analysis of `OverallQual`:
+  * Frequency distribution.
+  * Summary statistics.
+  * Missing value assessment.
+* Conducted bivariate analysis between `SalePrice` and representative features including:
+  * `OverallQual`
+  * `TotalBsmtSF`
+  * `GarageArea`
+* Used scatter plots, regression plots, box plots, and violin plots to investigate relationships.
+* Extended the analysis by incorporating `OverallQual` as a third variable (color encoding) to perform multivariate exploratory analysis.
+* Identified potential outlier candidates for further investigation rather than immediate removal.
+
+## Key Findings
+
+### Target Variable
+
+* `SalePrice` is positively skewed.
+* Median is a more representative measure of central tendency than the mean.
+* A logarithmic transformation may improve model performance.
+
+### Important Predictive Features
+
+The following variables exhibit strong positive relationships with `SalePrice`:
+
+* OverallQual
+* TotalBsmtSF
+* GarageArea
+
+### Missing Values
+
+* Missing values require semantic interpretation before preprocessing.
+* Many missing values correspond to the absence of a property feature (e.g., no pool or no garage) rather than incomplete data.
+
+### Outliers
+
+* Several observations exhibit unusually large basement or garage areas relative to their sale prices.
+* Outliers will be investigated during preprocessing rather than automatically removed.
+
+### Multivariate Insights
+
+* Coloring scatter plots by `OverallQual` revealed clearer patterns than bivariate plots alone.
+* Larger basement areas tend to be associated with higher-quality homes.
+* Garage area alone does not strongly determine house quality.
+
+## Professional Practices Learned
+
+* Exploratory Data Analysis is question-driven rather than feature-driven.
+* Representative features can provide sufficient understanding without exhaustively visualizing every variable.
+* Visualization often reveals relationships that correlation coefficients alone cannot.
+* Outliers should be investigated before deciding on any treatment.
+* EDA generates hypotheses that guide preprocessing and feature engineering rather than making irreversible decisions.
+
+## Reflection
+
+This phase reinforced that exploratory data analysis is not about producing as many plots as possible. Instead, its purpose is to answer meaningful questions about the dataset, understand important relationships, identify potential data quality issues, and build intuition that informs preprocessing and model development. The analyses performed during this phase provide a solid foundation for designing a principled preprocessing pipeline.
