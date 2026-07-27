@@ -2,262 +2,187 @@
 
 **Project:** House Prices – Advanced Regression Techniques (Kaggle)
 **Author:** Shiv Shankar Dubey
-**Project Type:** End-to-End Machine Learning Regression Project
-**Status:** In Progress
+**Type:** End-to-End Machine Learning Regression Project
+**Status:** Phase 5 – Data Preparation (In Progress)
 
 ---
 
-# Phase 1 – Business Understanding
+## Project Status
 
-## Objective
+| Phase | Description | Status |
+|---|---|---|
+| 1 | Business Understanding | ✅ Complete |
+| 2 | Project Setup | ✅ Complete |
+| 3 | Data Understanding | ✅ Complete |
+| 4 | Exploratory Data Analysis | ✅ Complete |
+| 5 | Data Preparation | ⏳ In Progress |
+| 6 | Baseline Model | ⬜ Pending |
+| 7 | Model Improvement | ⬜ Pending |
+| 8 | Model Evaluation | ⬜ Pending |
+| 9 | Model Explainability | ⬜ Pending |
+| 10 | Final Report | ⬜ Pending |
 
+---
+
+## Phase 1 – Business Understanding
+
+### Objective
 Develop a machine learning model to predict the sale price of residential houses in Ames, Iowa using 79 explanatory variables.
 
-## Business Perspective
+### Business Context
+The model can assist real estate agents, property investors, homeowners, and mortgage providers by estimating a property's market value to support pricing and investment decisions.
 
-The model can assist stakeholders such as:
-
-* Real estate agents
-* Property investors
-* Homeowners
-* Banks and mortgage providers
-
-by providing an estimated market value of a property to support pricing and investment decisions.
-
-## Key Learnings
-
-* Machine learning models support decision-making rather than replace human judgment.
-* Model errors have real business consequences:
-
-  * Overestimation may result in overpriced properties and slower sales.
-  * Underestimation may lead to financial losses for sellers.
-* Human review remains important, especially for unusual or unseen cases.
+### Key Learnings
+- ML models support decision-making; they do not replace human judgment.
+- Model errors have real consequences: overestimation leads to overpriced, slow-selling properties; underestimation causes financial losses for sellers.
+- Human review remains important, particularly for unusual or unseen cases.
 
 ---
-
-# Phase 2 – Project Setup
-
-## Objective
-
-Create a professional, reproducible, and maintainable project structure before beginning data analysis.
-
-## Completed Tasks
-
-* Created a professional project directory structure.
-* Initialized a Git repository.
-* Created and activated a Python virtual environment (`.venv`).
-* Configured `.gitignore` to exclude unnecessary files such as the virtual environment and cache files.
-* Installed initial project dependencies:
-
-  * pandas
-  * numpy
-  * matplotlib
-  * seaborn
-  * scikit-learn
-  * jupyter
-* Generated `requirements.txt` using `pip freeze`.
-* Made initial Git commits documenting project setup.
-* Downloaded the Kaggle dataset and placed the original files in `data/raw/`.
-
-## Engineering Decisions
-
-### Why use a virtual environment?
-
-To isolate project dependencies and avoid conflicts with other Python projects.
-
-### Why use `.gitignore`?
-
-To prevent tracking generated files, caches, and the virtual environment in Git.
-
-### Why generate `requirements.txt`?
-
-To allow anyone cloning the repository to recreate the same Python environment.
-
-### Why keep `raw` and `processed` data separate?
-
-The original dataset should remain unchanged. Any cleaning or preprocessing will generate new datasets inside `data/processed/`, ensuring reproducibility.
-
----
-
-# Current Project Status
-
-✅ Business Understanding
-
-✅ Project Setup
-
-⬜ Data Understanding
-
-⬜ Exploratory Data Analysis (EDA)
-
-⬜ Data Cleaning
-
-⬜ Feature Engineering
-
-⬜ Baseline Model
-
-⬜ Model Improvement
-
-⬜ Model Evaluation
-
-⬜ Model Explainability
-
-⬜ Final Report
-
----
-
-# Reflection
-
-This project is being developed with an emphasis on learning professional data science practices rather than only achieving a good Kaggle score.
-
-The primary focus is to understand the complete end-to-end machine learning workflow, including business understanding, reproducibility, version control, documentation, engineering best practices, and systematic decision-making.
-
-Future log entries will document important technical decisions, observations from the data, modeling experiments, and lessons learned throughout the project.
 
 ## Phase 2 – Project Setup
 
-### Completed
-- Created project directory structure
-- Initialized Git repository
-- Created Python virtual environment
-- Configured `.gitignore`
-- Installed initial project dependencies
-- Generated `requirements.txt`
-- Added first two Git commits
+### Objective
+Establish a professional, reproducible, and maintainable project structure before beginning analysis.
 
-### Notes
-Learned the purpose of virtual environments, reproducibility, Git commit practices, and dependency management.
+### Completed Tasks
+- Created a professional project directory structure.
+- Initialized a Git repository with a configured `.gitignore` (excluding `.venv`, caches, and generated files).
+- Created and activated a Python virtual environment (`.venv`).
+- Installed initial dependencies: `pandas`, `numpy`, `matplotlib`, `seaborn`, `scikit-learn`, `jupyter`.
+- Generated `requirements.txt` via `pip freeze`.
+- Downloaded the Kaggle dataset and placed original files in `data/raw/`.
+- Made initial Git commits documenting the setup.
 
+### Engineering Decisions
 
-# Phase 3 – Data Understanding
+| Decision | Rationale |
+|---|---|
+| Virtual environment | Isolates project dependencies and avoids conflicts with other projects. |
+| `.gitignore` | Prevents tracking of generated files, caches, and the virtual environment. |
+| `requirements.txt` | Allows anyone cloning the repository to recreate the same environment. |
+| Separate `raw/` and `processed/` directories | Preserves the original dataset; all cleaning produces new files in `data/processed/`. |
 
-## Objective
+---
 
-Develop a thorough understanding of the dataset before performing exploratory analysis, preprocessing, or model building.
+## Phase 3 – Data Understanding
 
-## Completed Tasks
+### Objective
+Develop a thorough understanding of the dataset before analysis, preprocessing, or model building.
 
-* Reviewed the Kaggle competition objective and evaluation metric.
-* Loaded `train.csv` and `test.csv` into pandas.
-* Verified dataset dimensions:
+### Completed Tasks
+- Reviewed the competition objective and evaluation metric (RMSE on log-transformed `SalePrice`).
+- Loaded `train.csv` and `test.csv` into pandas and verified dimensions:
+  - Training set: **1,460 rows × 81 columns**
+  - Test set: **1,459 rows × 80 columns**
+- Confirmed each row represents one residential property; `SalePrice` is the target; `Id` is an identifier.
+- Studied `data_description.txt` to understand feature semantics before writing any code.
+- Investigated missing values conceptually, identifying that many represent the absence of a property feature (e.g., no pool, no garage) rather than unknown information.
+- Began semantic feature classification: Identifier, Target, Numerical, Nominal, Ordinal, Temporal.
 
-  * Training set: **1460 rows × 81 columns**
-  * Test set: **1459 rows × 80 columns**
-* Confirmed that:
+### Key Learnings
+- Data understanding must precede cleaning and modeling.
+- The semantic meaning of a feature is often more important than its storage data type.
+- Numeric-looking variables (e.g., `MSSubClass`) may represent categorical information.
+- Ordinal features require different preprocessing strategies than nominal ones.
+- Missing values should always be interpreted before deciding how to handle them.
 
-  * Each row represents one residential house.
-  * `SalePrice` is the prediction target.
-  * `Id` is an identifier.
-  * `SalePrice` is absent from the test dataset.
-* Inspected feature names and data types.
-* Studied `data_description.txt` to understand feature meanings.
-* Investigated missing values conceptually rather than immediately applying preprocessing.
-* Identified that many missing values represent "Not Applicable" rather than missing information (e.g., no pool, no garage, no basement).
-* Began semantic feature classification:
+---
 
-  * Identifier
-  * Target
-  * Numerical
-  * Nominal
-  * Ordinal
-  * Temporal
+## Phase 4 – Exploratory Data Analysis
 
-## Key Learnings
+### Objective
+Explore the dataset systematically to understand target variable distribution, feature patterns, and relationships — and generate hypotheses for preprocessing and modeling.
 
-* Data understanding must precede data cleaning and modeling.
-* Missing values should always be interpreted before deciding how to handle them.
-* The semantic meaning of a feature is often more important than its storage data type.
-* Numeric-looking variables (such as `MSSubClass`) may actually represent categorical information.
-* Ordered categories (ordinal features) should be distinguished from nominal categories because they often require different preprocessing strategies.
+### Completed Tasks
+- Analyzed the distribution of `SalePrice`: histogram, box plot, summary statistics (median, IQR).
+- Generated a dataset-wide feature summary covering cardinality, missing values, and correlation with the target.
+- Performed univariate analysis of `OverallQual` (frequency distribution, summary statistics).
+- Conducted bivariate analyses between `SalePrice` and `OverallQual`, `TotalBsmtSF`, and `GarageArea` using scatter plots, regression plots, box plots, and violin plots.
+- Extended analyses to multivariate exploration by encoding `OverallQual` as a color dimension.
+- Flagged outlier candidates for investigation during preprocessing rather than immediate removal.
 
-## Professional Practices Learned
+### Key Findings
 
-* Read the dataset documentation before writing preprocessing code.
-* Build a mental model of the dataset before running extensive analysis.
-* Separate observations, hypotheses, evidence, and conclusions.
-* Perform disciplined exploration by asking a clear question before executing each analysis step.
+**Target variable:** `SalePrice` is positively skewed; the median is a more representative measure of central tendency than the mean. A log transformation is likely to improve model performance.
 
-## Current Project Status
+**Strong predictive features:**
+- `OverallQual` — strong positive relationship with sale price.
+- `TotalBsmtSF` — larger basements associated with higher prices, especially in high-quality homes.
+- `GarageArea` — positive relationship, though garage area alone is a weak quality predictor.
 
-* ✅ Phase 1 – Business Understanding
-* ✅ Phase 2 – Project Setup
-* ✅ Phase 3 – Data Understanding
-* ⏳ Phase 4 – Exploratory Data Analysis (Next)
+**Missing values:** Require semantic interpretation; many represent absent features rather than data gaps.
 
-## Reflection
+**Outliers:** Several observations show unusually large basement or garage areas relative to their price. Treatment deferred to preprocessing.
 
-This phase reinforced that successful machine learning projects begin with understanding the data rather than immediately building models. Careful interpretation of features, documentation, and missing values provides the foundation for meaningful exploratory analysis and informed modeling decisions in the next phase.
+### Key Learnings
+- EDA is question-driven, not feature-driven — ask a clear question before each analysis step.
+- Visualization reveals relationships that correlation coefficients alone cannot capture.
+- EDA generates hypotheses; it does not make irreversible preprocessing decisions.
 
+---
 
+## Phase 5 – Data Preparation
 
-# Phase 4 – Exploratory Data Analysis (EDA)
+### Objective
+Prepare the dataset for machine learning with a reproducible, leakage-free preprocessing pipeline that preserves semantic meaning.
 
-## Objective
+### Completed Tasks
 
-Explore the dataset systematically to understand the distribution of the target variable, identify important feature patterns, investigate relationships with the target, and generate hypotheses for preprocessing and model development.
+**Train/Validation Split**
+- Split the original training data into training and validation sets before any learned preprocessing.
+- Established a leakage-free workflow where all `fit()` operations are applied exclusively to the training data.
 
-## Completed Tasks
+**Missing Value Treatment**
+- Distinguished between structural missing values (absent property features) and genuinely unknown values.
+- Replaced structural missing values using domain knowledge:
+  - Categorical structural features → `"None"`
+  - Numerical structural features → `0`
+- Investigated ambiguous cases (`LotFrontage`, `Electrical`, `GarageYrBlt`, `MasVnrType`) individually before selecting imputation strategies.
+- Implemented `SimpleImputer` for simple statistical imputation (`Electrical`).
+- Designed custom scikit-learn-compatible transformers:
+  - `NeighborhoodLotFrontageImputer` — imputes `LotFrontage` using neighborhood medians.
+  - `Exterior1stMasVnrTypeImputer` — resolves `MasVnrType` using domain knowledge and rule-based logic.
+- Implemented a custom `MedianImputer` to reinforce understanding of the `fit()` / `transform()` estimator pattern.
 
-* Performed descriptive statistical analysis of the target variable (`SalePrice`).
-* Examined the distribution of `SalePrice` using histograms and box plots.
-* Identified positive skewness in the target distribution.
-* Calculated summary statistics including median and interquartile range (IQR).
-* Generated a dataset-wide feature summary:
-  * Numerical and categorical feature identification.
-  * Missing value analysis.
-  * Feature cardinality analysis.
-  * Initial correlation analysis with the target variable.
-* Performed detailed univariate analysis of `OverallQual`:
-  * Frequency distribution.
-  * Summary statistics.
-  * Missing value assessment.
-* Conducted bivariate analysis between `SalePrice` and representative features including:
-  * `OverallQual`
-  * `TotalBsmtSF`
-  * `GarageArea`
-* Used scatter plots, regression plots, box plots, and violin plots to investigate relationships.
-* Extended the analysis by incorporating `OverallQual` as a third variable (color encoding) to perform multivariate exploratory analysis.
-* Identified potential outlier candidates for further investigation rather than immediate removal.
+**Feature Engineering**
+- Designed an engineering plan before implementation, ensuring each new feature encodes a meaningful domain concept.
 
-## Key Findings
+| Feature | Description |
+|---|---|
+| `HouseAge` | Age of the house at time of sale |
+| `GarageAge` | Age of the garage at time of sale |
+| `YearsSinceRemodel` | Years elapsed since last remodel |
+| `HasGarage` | Binary indicator for garage presence |
+| `HasBsmt` | Binary indicator for basement presence |
+| `TotalBathrooms` | Combined bathroom count (full + half-weighted) |
+| `TotalUsableSF` | Total usable square footage across floors |
+| `BsmtFinishedRatio` | Ratio of finished basement area to total basement area |
+| `OverallQual_x_TotalUsableSF` | Interaction term: quality × usable area |
 
-### Target Variable
+- Classified all features into a semantic inventory: Ordinal, Nominal, Continuous Numerical, Discrete Numerical, Binary, and Candidates for Future Removal.
+- Deferred irreversible feature removal until after benchmarking, following an evidence-driven workflow.
 
-* `SalePrice` is positively skewed.
-* Median is a more representative measure of central tendency than the mean.
-* A logarithmic transformation may improve model performance.
+### Remaining Tasks
+- Categorical encoding (ordinal vs. nominal strategies).
+- Target variable transformation (log transform of `SalePrice`).
+- Feature scaling.
+- Outlier treatment.
+- Assemble a `ColumnTransformer`.
+- Build an end-to-end scikit-learn `Pipeline`.
 
-### Important Predictive Features
+### Key Learnings
+- Preprocessing decisions must be driven by feature semantics, not data types.
+- Leakage prevention begins at the train/validation split — every learned transformation is fitted on training data only.
+- Custom transformers integrating into scikit-learn require `BaseEstimator` and `TransformerMixin`.
+- Feature engineering should encode domain concepts, not arbitrary mathematical combinations.
+- New engineered features should not replace original features without empirical validation.
+- Scaling requirements depend on the learning algorithm, not the feature.
+- A robust preprocessing workflow prioritises reproducibility, maintainability, and deployment readiness.
 
-The following variables exhibit strong positive relationships with `SalePrice`:
+---
 
-* OverallQual
-* TotalBsmtSF
-* GarageArea
+## Overall Reflection
 
-### Missing Values
+This project is developed with an emphasis on professional data science practices over optimising a Kaggle score. Each phase reinforces the full end-to-end ML workflow: business framing, reproducibility, version control, systematic documentation, and evidence-driven decision-making.
 
-* Missing values require semantic interpretation before preprocessing.
-* Many missing values correspond to the absence of a property feature (e.g., no pool or no garage) rather than incomplete data.
-
-### Outliers
-
-* Several observations exhibit unusually large basement or garage areas relative to their sale prices.
-* Outliers will be investigated during preprocessing rather than automatically removed.
-
-### Multivariate Insights
-
-* Coloring scatter plots by `OverallQual` revealed clearer patterns than bivariate plots alone.
-* Larger basement areas tend to be associated with higher-quality homes.
-* Garage area alone does not strongly determine house quality.
-
-## Professional Practices Learned
-
-* Exploratory Data Analysis is question-driven rather than feature-driven.
-* Representative features can provide sufficient understanding without exhaustively visualizing every variable.
-* Visualization often reveals relationships that correlation coefficients alone cannot.
-* Outliers should be investigated before deciding on any treatment.
-* EDA generates hypotheses that guide preprocessing and feature engineering rather than making irreversible decisions.
-
-## Reflection
-
-This phase reinforced that exploratory data analysis is not about producing as many plots as possible. Instead, its purpose is to answer meaningful questions about the dataset, understand important relationships, identify potential data quality issues, and build intuition that informs preprocessing and model development. The analyses performed during this phase provide a solid foundation for designing a principled preprocessing pipeline.
+The guiding principle throughout has been to understand before acting — reading documentation before writing code, interpreting missing values before imputing them, designing feature engineering before implementing it, and deferring irreversible decisions until empirical evidence supports them.
