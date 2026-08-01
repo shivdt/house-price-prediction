@@ -162,13 +162,26 @@ Prepare the dataset for machine learning with a reproducible, leakage-free prepr
 - Classified all features into a semantic inventory: Ordinal, Nominal, Continuous Numerical, Discrete Numerical, Binary, and Candidates for Future Removal.
 - Deferred irreversible feature removal until after benchmarking, following an evidence-driven workflow.
 
+**Encoding, Transformation & Scaling Policy**
+- Finalised a production-oriented categorical encoding policy:
+  - Explicit ordinal mappings based on domain semantics.
+  - One-Hot Encoding for nominal features.
+  - Explicit binary mappings for binary categorical features.
+  - Defined a strategy for handling unseen categories at inference time.
+- Evaluated target transformation options (`log`, `log1p`, Box–Cox, Yeo–Johnson) and selected a log-based transformation consistent with the competition's RMSE-on-log objective.
+- Designed a model-dependent scaling policy, distinguishing preprocessing requirements for linear, distance-based, and tree-based algorithms.
+
+**Outlier Strategy**
+- Established an evidence-driven outlier policy separating three categories: data recording errors, influential observations, and legitimate rare observations.
+- Deferred outlier removal decisions until empirical model benchmarking.
+
+**Preprocessing Architecture Design**
+- Designed the overall pipeline architecture using custom transformers, `ColumnTransformer`, and `Pipeline` to ensure reproducibility and eliminate data leakage end-to-end.
+
 ### Remaining Tasks
-- Categorical encoding (ordinal vs. nominal strategies).
-- Target variable transformation (log transform of `SalePrice`).
-- Feature scaling.
-- Outlier treatment.
-- Assemble a `ColumnTransformer`.
-- Build an end-to-end scikit-learn `Pipeline`.
+- Implement the preprocessing architecture (custom transformers, `ColumnTransformer`, `Pipeline`).
+- Train baseline models.
+- Evaluate preprocessing choices empirically.
 
 ### Key Learnings
 - Preprocessing decisions must be driven by feature semantics, not data types.
@@ -177,6 +190,9 @@ Prepare the dataset for machine learning with a reproducible, leakage-free prepr
 - Feature engineering should encode domain concepts, not arbitrary mathematical combinations.
 - New engineered features should not replace original features without empirical validation.
 - Scaling requirements depend on the learning algorithm, not the feature.
+- Encoding strategies must account for inference-time unseen categories, not just training data.
+- Target transformation choices should be aligned to the evaluation metric, not applied by default.
+- Outlier treatment requires intent classification before any removal decision is made.
 - A robust preprocessing workflow prioritises reproducibility, maintainability, and deployment readiness.
 
 ---
