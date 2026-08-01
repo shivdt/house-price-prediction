@@ -20,6 +20,10 @@ Thumbs.db
 *.joblib
 
 # Temporary: PROJECT_LOG and docs
-# Temporary files and logs
+# Prevent project tracking log and design documentation from being uploaded
 PROJECT_LOG.md
 preprocessing_design.md
+
+# If these files live inside a directory named docs/ or .docs/
+docs/
+.docs/
