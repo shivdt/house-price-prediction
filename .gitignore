@@ -20,5 +20,6 @@ Thumbs.db
 *.joblib
 
 # Temporary: PROJECT_LOG and docs
-.docs/
-.PROJECT_LOG/
+# Temporary files and logs
+PROJECT_LOG.md
+preprocessing_design.md
