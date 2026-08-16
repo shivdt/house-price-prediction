@@ -1,0 +1,147 @@
+# ames_features_config.yaml
+
+feature_groups:
+  continuous_numerical:
+    - LotFrontage
+    - LotArea
+    - MasVnrArea
+    - BsmtUnfSF
+    - GarageArea
+    - WoodDeckSF
+    - OpenPorchSF
+    - EnclosedPorch
+    - ScreenPorch
+    - 3SsnPorch
+    - PoolArea
+    - MiscVal
+    - GrLivArea                  # Candidate for Removal
+    - 1stFlrSF                   # Candidate for Removal
+    - 2ndFlrSF                   # Candidate for Removal
+    - TotalBsmtSF                # Candidate for Removal
+    - LowQualFinSF
+    - BsmtFinSF1
+    - BsmtFinSF2
+    - TotalUsableSF             # Engineered
+    - BsmtFinishedRatio         # Engineered
+    - OverallQual_x_TotalUsableSF # Engineered
+  
+  discrete_numerical:
+    - TotalBathrooms            # Engineered
+    - KitchenAbvGr
+    - TotRmsAbvGrd
+    - Fireplaces
+    - BedroomAbvGr
+    - MoSold
+    - GarageCars
+
+  elapsed_time:
+    - HouseAge                  # Engineered
+    - YearsSinceRemodel         # Engineered
+    - GarageAge                 # Engineered
+
+  ordinal:
+    - ExterQual
+    - ExterCond
+    - BsmtQual
+    - BsmtCond
+    - HeatingQC
+    - KitchenQual
+    - FireplaceQu
+    - GarageQual
+    - GarageCond
+    - PoolQC
+    - Fence
+    - GarageFinish
+    - LotShape
+    - LandSlope
+    - BsmtExposure
+    - BsmtFinType1
+    - BsmtFinType2
+    - Utilities
+    - Functional
+    - PavedDrive
+
+  passthrough_numeric:
+    - OverallQual
+    - OverallCond
+
+  nominal_high_card:
+    - Neighborhood
+    - Exterior1st
+    - Exterior2nd
+    - MSSubClass
+
+  nominal_low_card:
+    - MSZoning
+    - Street
+    - Alley
+    - BldgType
+    - HouseStyle
+    - RoofStyle
+    - Foundation
+    - GarageType
+    - SaleCondition
+    - LotConfig
+    - LandContour
+    - MasVnrType
+    - Heating
+    - Electrical
+    - MiscFeature
+    - Condition1
+    - Condition2
+    - RoofMatl
+    - SaleType
+
+  binary_flag:
+    - CentralAir
+    - HasGarage                 # Engineered
+    - HasBsmt                   # Engineered
+
+  candidates_for_removal:
+    - Id                        # Identifier
+    - YearBuilt
+    - YrSold
+    - YearRemodAdd
+    - GarageYrBlt
+    - FullBath
+    - HalfBath
+    - BsmtFullBath
+    - BsmtHalfBath
+#    - GrLivArea
+#    - TotalBsmtSF
+#    - 1stFlrSF
+#    - 2ndFlrSF
+
+  target:
+    - SalePrice
+
+# ==========================================
+# Mappings for Encoders
+# ==========================================
+mappings:
+  binary:
+    CentralAir: 
+      N: 0
+      Y: 1
+      
+  ordinal:
+    ExterQual: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    ExterCond: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    BsmtQual: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    BsmtCond: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    HeatingQC: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    KitchenQual: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    FireplaceQu: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    GarageQual: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    GarageCond: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    PoolQC: ["None", "Po", "Fa", "TA", "Gd", "Ex"]
+    Fence: ["None", "MnWw", "GdWo", "MnPrv", "GdPrv"]
+    GarageFinish: ["None", "Unf", "RFn", "Fin"]
+    BsmtExposure: ["None", "No", "Mn", "Av", "Gd"]
+    LotShape: ["IR3", "IR2", "IR1", "Reg"]
+    Utilities: ["ELO", "NoSeWa", "NoSewr", "AllPub"]
+    LandSlope: ["Sev", "Mod", "Gtl"]
+    BsmtFinType1: ["None", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
+    BsmtFinType2: ["None", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
+    Functional: ["Sal", "Sev", "Maj2", "Maj1", "Mod", "Min2", "Min1", "Typ"]
+    PavedDrive: ["N", "P", "Y"]
