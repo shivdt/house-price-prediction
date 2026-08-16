@@ -16,9 +16,6 @@ HousePrices/
 │   ├── raw/                   # Immutable original data (train.csv, test.csv, data_description.txt)
 │   └── processed/             # Generated predictions (baseline_submission.csv)
 │
-├── docs/                      # Documentation for architecture
-│   ├── design.md
-│   └── preprocessing_design.md
 │
 ├── models/                    # Strictly ignored by Git (unless small)
 │   └── xgboost_baseline_v1.joblib  # Serialized, deployment-ready pipeline
@@ -72,6 +69,7 @@ cd house-price-prediction
 
 Your directory structure should look like:
 
+```text
 house-price-prediction/
 ├── data/
 │   └── raw/
@@ -79,6 +77,7 @@ house-price-prediction/
 │       └── test.csv
 ├── ...
 └── requirements.txt
+```
 
 ### 2. Configure the Environment
 Open the terminal inside your Code Editor and execute the setup script to create an isolated environment and install the required data science packages:
