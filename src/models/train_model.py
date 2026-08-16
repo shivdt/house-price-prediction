@@ -1,4 +1,5 @@
 import os
+import yaml
 import pandas as pd
 import numpy as np
 import joblib
@@ -9,45 +10,100 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder, OneHotEncoder, TargetEncoder
 from sklearn.compose import TransformedTargetRegressor
 from xgboost import XGBRegressor
+from sklearn.metrics import root_mean_squared_log_error
 
-# IMPORTANT: Importing your custom modularized code!
-from src.features.custom_transformers import (
+
+from src.features.preprocessing import (
     AmesFeatureEngineer, 
     NeighborhoodLotFrontageImputer, 
-    Exterior1stMasVnrTypeImputer, 
-    StructuralImputer
+    MasVnrImputer, 
+    StructuralImputer,
+    remove_training_outliers
 )
 
-def build_model_pipeline():
-    """Constructs the complete ML pipeline architecture."""
-    
-    # 1. Feature Lists (Your Milestone 1 Metadata)
-    ordinal_features = ['ExterQual', 'ExterCond', 'BsmtQual', 'BsmtCond', 'HeatingQC', 'KitchenQual', 'FireplaceQu', 'GarageQual', 'GarageCond', 'PoolQC', 'Fence', 'GarageFinish', 'LotShape', 'LandSlope', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Utilities', 'Functional', 'PavedDrive']
-    nominal_low_card_features = ['MSZoning', 'Street', 'Alley', 'BldgType', 'HouseStyle', 'RoofStyle', 'Foundation', 'GarageType', 'SaleCondition', 'LotConfig', 'LandContour', 'MasVnrType', 'Heating', 'Electrical', 'MiscFeature', 'Condition1', 'Condition2', 'RoofMatl', 'SaleType']
-    nominal_high_card_features = ['Neighborhood', 'Exterior1st', 'Exterior2nd', 'MSSubClass']
-    numeric_features = ['LotFrontage', 'LotArea', 'MasVnrArea', 'BsmtUnfSF', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'ScreenPorch', '3SsnPorch', 'PoolArea', 'MiscVal', 'GrLivArea', '1stFlrSF', '2ndFlrSF', 'TotalBsmtSF', 'LowQualFinSF', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalUsableSF', 'BsmtFinishedRatio', 'OverallQual_x_TotalUsableSF', 'TotalBathrooms', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'BedroomAbvGr', 'MoSold', 'GarageCars', 'HouseAge', 'YearsSinceRemodel', 'GarageAge', 'OverallQual', 'OverallCond']
-    binary_features = ['CentralAir', 'HasGarage', 'HasBsmt']
+def load_config(config_path = "src/config.yaml"):
+    with open(config_path, 'r') as file:
+        return yaml.safe_load(file)
 
-    # 2. Ordinal Mappings Setup
-    quality_scale = ["None", "Po", "Fa", "TA", "Gd", "Ex"]
-    garage_finish_scale = ["None", "Unf", "RFn", "Fin"]
-    basement_finish_scale = ["None", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
-    exposure_scale = ["None", "No", "Mn", "Av", "Gd"]
+
+# Load the dictionary
+config = load_config()
+
+
+
+def build_model_pipeline():
+    
+    # Feature Lists 
+    ordinal_features = config['feature_groups']['ordinal']
+
+    nominal_low_card_features = config['feature_groups']['nominal_low_card']
+
+    nominal_high_card_features = config['feature_groups']['nominal_high_card']
+
+    numeric_features = config['feature_groups']['continuous_numerical'] + config['feature_groups']['discrete_numerical'] + config['feature_groups']['elapsed_time'] + config['feature_groups']['passthrough_numeric']
+
+    binary_features = config['feature_groups']['binary_flag']
+
+   
     
     ordinal_mappings = {
-        'ExterQual': quality_scale, 'ExterCond': quality_scale, 'BsmtQual': quality_scale, 'BsmtCond': quality_scale, 'HeatingQC': quality_scale, 'KitchenQual': quality_scale, 'FireplaceQu': quality_scale, 'GarageQual': quality_scale, 'GarageCond': quality_scale, 'PoolQC': quality_scale, 'Fence': ["None", "MnWw", "GdWo", "MnPrv", "GdPrv"], 'GarageFinish': garage_finish_scale, 'BsmtExposure': exposure_scale, 'LotShape': ["IR3", "IR2", "IR1", "Reg"], 'Utilities': ["ELO", "NoSeWa", "NoSewr", "AllPub"], 'LandSlope': ["Sev", "Mod", "Gtl"], 'BsmtFinType1': basement_finish_scale, 'BsmtFinType2': basement_finish_scale, 'Functional': ["Sal", "Sev", "Maj2", "Maj1", "Mod", "Min2", "Min1", "Typ"], 'PavedDrive': ["N", "P", "Y"]
+        'ExterQual': config['mappings']['ordinal']['ExterQual'], 
+        'ExterCond': config['mappings']['ordinal']['ExterCond'], 
+        'BsmtQual': config['mappings']['ordinal']['BsmtQual'], 
+        'BsmtCond': config['mappings']['ordinal']['BsmtCond'], 
+        'HeatingQC': config['mappings']['ordinal']['HeatingQC'], 
+        'KitchenQual': config['mappings']['ordinal']['KitchenQual'], 
+        'FireplaceQu': config['mappings']['ordinal']['FireplaceQu'], 
+        'GarageQual': config['mappings']['ordinal']['GarageQual'], 
+        'GarageCond': config['mappings']['ordinal']['GarageCond'], 
+        'PoolQC': config['mappings']['ordinal']['PoolQC'], 
+        'Fence': config['mappings']['ordinal']['Fence'], 
+        'GarageFinish': config['mappings']['ordinal']['GarageFinish'], 
+        'BsmtExposure': config['mappings']['ordinal']['BsmtExposure'], 
+        'LotShape': config['mappings']['ordinal']['LotShape'], 
+        'Utilities': config['mappings']['ordinal']['Utilities'], 
+        'LandSlope': config['mappings']['ordinal']['LandSlope'], 
+        'BsmtFinType1': config['mappings']['ordinal']['BsmtFinType1'], 
+        'BsmtFinType2': config['mappings']['ordinal']['BsmtFinType2'], 
+        'Functional': config['mappings']['ordinal']['Functional'], 
+        'PavedDrive': config['mappings']['ordinal']['PavedDrive']
     }
+
+
     ordered_categories = [ordinal_mappings[feat] for feat in ordinal_features]
 
-    # 3. Branch Pipelines
-    ordinal_encoder = OrdinalEncoder(categories=ordered_categories, handle_unknown='use_encoded_value', unknown_value=-1, encoded_missing_value=-1)
-    nominal_low_encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
-    nominal_high_encoder = TargetEncoder(target_type='continuous', smooth='auto', cv=5)
+    # Branch Pipelines
+    ordinal_encoder = OrdinalEncoder(
+        categories=ordered_categories, 
+        handle_unknown='use_encoded_value', 
+        unknown_value=-1, 
+        encoded_missing_value=-1
+        )
     
-    numeric_pipeline = Pipeline([('safety_imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())])
-    binary_pipeline = Pipeline([('safety_imputer', SimpleImputer(strategy='most_frequent'))])
+    nominal_low_encoder = OneHotEncoder(
+        handle_unknown='ignore', 
+        sparse_output=False
+        )
+    
+    nominal_high_encoder = TargetEncoder(
+        target_type='continuous', 
+        smooth='auto', 
+        cv=5
+        )
+    
+    numeric_pipeline = Pipeline(
+        [
+            ('safety_imputer', SimpleImputer(strategy='median')), 
+            ('scaler', StandardScaler())
+        ]
+    )
+    binary_pipeline = Pipeline(
+        [
+            ('safety_imputer', SimpleImputer(strategy='most_frequent'))
+        ]
+    )
 
-    # 4. Column Transformer
+    # Column Transformer
     branch_preprocessor = ColumnTransformer(
         transformers=[
             ('ordinal', ordinal_encoder, ordinal_features),
@@ -59,27 +115,39 @@ def build_model_pipeline():
         remainder='drop'
     )
 
-    # 5. Master Preprocessor
-    base_processing = Pipeline([
-        ('structural_imputer', StructuralImputer()),
-        ('lot_frontage_imputer', NeighborhoodLotFrontageImputer()),
-        ('masvnr_imputer', Exterior1stMasVnrTypeImputer()),
-        ('feature_engineer', AmesFeatureEngineer())
-    ])
+    # Master Preprocessor
+    base_processing = Pipeline(
+        [
+            ('structural_imputer', StructuralImputer()),
+            ('lot_frontage_imputer', NeighborhoodLotFrontageImputer()),
+            ('masvnr_imputer', MasVnrImputer()),
+            ('feature_engineer', AmesFeatureEngineer(
+                drop_columns=config['feature_groups']['candidates_for_removal'], 
+                central_air_map=config['mappings']['binary']['CentralAir'])
+                )
+        ]
+    )
     
-    preprocessor = Pipeline([('base', base_processing), ('branch', branch_preprocessor)])
+    preprocessor = Pipeline(
+        [
+            ('base', base_processing), 
+            ('branch', branch_preprocessor)
+        ]
+    )
 
-    # 6. Final Model Pipeline
-    model_pipeline = Pipeline([
+    # Final Model Pipeline
+    model_pipeline = Pipeline(
+        [
         ("preprocessor", preprocessor),
         ("model", XGBRegressor(n_estimators=100, random_state=42, n_jobs=-1))
-    ])
+        ]
+    )
 
     return TransformedTargetRegressor(regressor=model_pipeline, func=np.log1p, inverse_func=np.expm1)
 
 def main():
     print("Loading raw training data...")
-    # Assuming script is run from the root directory of the project
+    # Run script from the root directory of the project
     data_path = os.path.join("data", "raw", "train.csv")
     df = pd.read_csv(data_path)
     
@@ -89,10 +157,12 @@ def main():
     # Split the data
     X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    X_train, y_train = remove_training_outliers(X_train, y_train)
+
     print("Building and compiling the pipeline architecture...")
     model = build_model_pipeline()
     
-    print("Training the master pipeline... (This may take a moment)")
+    print("Training the master pipeline...")
     model.fit(X_train, y_train)
     
     print("Training complete. Serializing the model...")
@@ -103,5 +173,12 @@ def main():
     joblib.dump(model, save_path)
     print(f"Success! Production model saved to: {save_path}")
 
+    print("Evaluating model on validation set...")
+    valid_preds = model.predict(X_valid)
+
+    rmsle = root_mean_squared_log_error(y_valid, valid_preds)
+    print(f"Validation RMSLE: {rmsle:.5f}")
+
+
 if __name__ == "__main__":
-    main()
+    main() # Run script via: python -m src.models.train_model
