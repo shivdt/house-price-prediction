@@ -5,11 +5,13 @@ from sklearn.base import BaseEstimator, TransformerMixin
 # 1. Elapsed Time & Feature Engineering Transformer
 # ======================================================
 class AmesFeatureEngineer(BaseEstimator, TransformerMixin):
-    def __init__(self):
-        pass
-        
+    def __init__(self, drop_columns=None, central_air_map=None): # This avoids I/O bottleneck during transform(), by avoiding importing yaml file
+        # Store the configurations passed from train_model.py
+        self.drop_columns = drop_columns if drop_columns else []
+        self.central_air_map = central_air_map if central_air_map else {'N': 0, 'Y': 1}
+
     def fit(self, X, y=None):
-        self.is_fitted_ = True # prevents scikit-learn from throwing a NotFittedError.
+        self.is_fitted_ = True # prevents scikit-learn from throwing a NotFittedError: This Pipeline instance is not fitted yet.
         return self
         
     def transform(self, X):
@@ -24,7 +26,7 @@ class AmesFeatureEngineer(BaseEstimator, TransformerMixin):
         # Binary Features & Mappings
         X_new['HasGarage'] = (X_new['GarageType'] != "None").astype(int)
         X_new['HasBsmt'] = (X_new['TotalBsmtSF'] > 0).astype(int)
-        X_new['CentralAir'] = X_new['CentralAir'].map({'N': 0, 'Y': 1})
+        X_new['CentralAir'] = X_new['CentralAir'].map(self.central_air_map)
         
         # Area and Room Features
         X_new['TotalBathrooms'] = (
@@ -39,7 +41,8 @@ class AmesFeatureEngineer(BaseEstimator, TransformerMixin):
             (X_new['BsmtFinSF1'] + X_new['BsmtFinSF2']) / X_new['TotalBsmtSF']
         )
         X_new['OverallQual_x_TotalUsableSF'] = X_new['OverallQual'] * X_new['TotalUsableSF']
-        
+
+        X_new = X_new.drop(columns = self.drop_columns, errors='ignore') # Got KeyError, 'Id' not found, but somehow adding errors = 'ignore' fixed it!
         return X_new
 
 # ======================================================
