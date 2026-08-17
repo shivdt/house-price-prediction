@@ -17,7 +17,7 @@ Thumbs.db
 
 # Model artifacts (optional for now)
 *.pkl
-*.joblib
+#*.joblib
 
 # Temporary: PROJECT_LOG and docs
 # Prevent project tracking log and design documentation from being uploaded
@@ -27,3 +27,10 @@ preprocessing_design.md
 # If these files live inside a directory named docs/ or .docs/
 docs/
 .docs/
+
+# Data folders
+data/raw/
+data/processed/
+# data/predictions/
+data/external/
+data/interim/
