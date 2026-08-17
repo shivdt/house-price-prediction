@@ -60,7 +60,7 @@ Before starting, make sure you have:
 ### 1. Clone the Repository and Download the Dataset
 
 ```bash
-git clone [https://github.com/shivdt/house-price-prediction](https://github.com/shivdt/house-price-prediction)
+git clone https://github.com/shivdt/house-price-prediction
 cd house-price-prediction
 
 ```
@@ -121,4 +121,3 @@ python -m src.models.predict_model --input data/raw/test.csv --output data/proce
 * **Kaggle RMSLE (Log-Error):** 0.14388
 * **Model Interpretability:** SHAP value diagnostics reveal that the engineered feature `OverallQual_x_TotalUsableSF`, alongside `Neighborhood` and `YearsSinceRemodel`, are the primary drivers of the model's pricing predictions.
 
-```
