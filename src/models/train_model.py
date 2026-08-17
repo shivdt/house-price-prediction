@@ -179,6 +179,9 @@ def main():
     rmsle = root_mean_squared_log_error(y_valid, valid_preds)
     print(f"Validation RMSLE: {rmsle:.5f}")
 
-
+#  It ensures that the training pipeline only runs when you execute the script directly via the terminal.
 if __name__ == "__main__":
-    main() # Run script via: python -m src.models.train_model
+    main() 
+
+
+# Run script via: python -m src.models.train_model
