@@ -116,8 +116,6 @@ python -m src.models.predict_model --input data/raw/test.csv --output data/proce
 ```
 ## 📊 Results
 
-* **Validation RMSE:** $ 4496.67
-* **Validation RMSLE:** 0.02342
 * **Kaggle RMSLE (Log-Error):** 0.14388
 * **Model Interpretability:** SHAP value diagnostics reveal that the engineered feature `OverallQual_x_TotalUsableSF`, alongside `Neighborhood` and `YearsSinceRemodel`, are the primary drivers of the model's pricing predictions.
 
